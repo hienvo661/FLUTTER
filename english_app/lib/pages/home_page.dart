@@ -6,14 +6,18 @@ import 'package:english_words/english_words.dart';
 import 'package:f2_flutter_ecommerce_app/models/english_today.dart';
 import 'package:f2_flutter_ecommerce_app/packages/quote/qoute_model.dart';
 import 'package:f2_flutter_ecommerce_app/packages/quote/quote.dart';
+import 'package:f2_flutter_ecommerce_app/pages/Showmore2_page.dart';
 import 'package:f2_flutter_ecommerce_app/pages/Showmore_page.dart';
 import 'package:f2_flutter_ecommerce_app/pages/control_page.dart';
+import 'package:f2_flutter_ecommerce_app/pages/favorites_page.dart';
 import 'package:f2_flutter_ecommerce_app/values/app_assets.dart';
 import 'package:f2_flutter_ecommerce_app/values/app_colors.dart';
 import 'package:f2_flutter_ecommerce_app/values/app_styles.dart';
 import 'package:f2_flutter_ecommerce_app/values/share_keys.dart';
 import 'package:f2_flutter_ecommerce_app/widget_Button/drawer_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Homepage extends StatefulWidget {
@@ -150,7 +154,7 @@ class _HomepageState extends State<Homepage> {
                           _currentindex = index;
                         });
                       },
-                      itemCount: words.length,
+                      itemCount: words.length > 6 ? 7 : words.length,
                       itemBuilder: (context, index) {
                         // trường hợp lúc chưa init xong cái list bị rỗng ngay chổ này nó return về container.
                         // if (words.isEmpty) {
@@ -166,119 +170,185 @@ class _HomepageState extends State<Homepage> {
                             words[index].noun != null ? words[index].noun! : '';
                         secondText = secondText.substring(1, secondText.length);
                         String quotesDefault =
-                            "Insanity is doing the same thing, over and over again, but expecting different results.";
+                            "Life isn’t about finding yourself. Life is about creating yourself.";
                         String quote = words[index].quote != null
                             ? words[index].quote!
                             : quotesDefault;
+
                         return Padding(
                           // cái khung nội dung
                           padding: const EdgeInsets.all(7),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 4,
-                                    offset: Offset(6, 2)),
-                              ],
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(right: 10, top: 10),
-                                  alignment: Alignment.centerRight,
-                                  child: Image.asset(AppAssets.heart),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: RichText(
-                                    maxLines:
-                                        1, // không cho chữ xuống hàng khi chữ quá dài
-                                    overflow: TextOverflow
-                                        .ellipsis, // khi chữ quá dài thì sẽ ....
-                                    textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      text: firstText,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 98,
-                                        fontFamily: 'sen',
-                                        shadows: [
+                          child: Material(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            color: AppColors.primaryColor,
+                            elevation: 4,
+                            child: _currentindex >= 6
+                                ? InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  ShowmoreWidgetPage2(
+                                                      wordss: this.words)));
+                                    },
+                                    splashColor: AppColors.lighBlue,
+                                    child: Center(
+                                      child: Text(
+                                        'Show more...',
+                                        style: AppStyles.h4.copyWith(shadows: [
                                           BoxShadow(
-                                              color: Colors.black38,
-                                              offset: Offset(3, 5),
-                                              blurRadius: 6),
-                                        ],
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          style: TextStyle(
-                                            fontSize: 50,
+                                            color: Colors.black38,
+                                            offset: Offset(1, 3),
+                                            blurRadius: 2,
                                           ),
-                                          text: secondText,
-                                        )
-                                      ],
+                                        ]),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 10, left: 20),
-                                        child: AutoSizeText(
-                                          '"$quote"',
-                                          maxFontSize:
-                                              26, //size phải lớn hơn size font mặc định
-                                          style: AppStyles.h4.copyWith(
-                                            letterSpacing: 1,
-                                            color: AppColors.textColor,
+                                  )
+                                : Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        LikeButton(
+                                          onTap: (bool isLiked) async {
+                                            setState(() {
+                                              words[index].isFavorites =
+                                                  !words[index].isFavorites;
+                                            });
+                                            return words[index].isFavorites;
+                                          },
+                                          isLiked: words[index].isFavorites,
+                                          padding: EdgeInsets.only(
+                                              right: 15, top: 10),
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          size: 45,
+                                          circleColor: CircleColor(
+                                              start: Color(0xff00ddff),
+                                              end: Color(0xff0099cc)),
+                                          bubblesColor: BubblesColor(
+                                            dotPrimaryColor: Color(0xff33b5e5),
+                                            dotSecondaryColor:
+                                                Color(0xff0099cc),
+                                          ),
+                                          likeBuilder: (bool isLiked) {
+                                            return ImageIcon(
+                                              AssetImage(
+                                                AppAssets.heart,
+                                              ),
+                                              color: isLiked
+                                                  ? Colors.red
+                                                  : Colors.white,
+                                            );
+                                            // return Icon(
+                                            //   Icons.favorite,
+                                            //   color: isLiked
+                                            //       ? Colors.red
+                                            //       : Colors.grey,
+                                            //   size: 45,
+                                            // );
+                                          },
+                                        ),
+                                        // Container(
+                                        //   padding: EdgeInsets.only(
+                                        //       right: 10, top: 10),
+                                        //   alignment: Alignment.centerRight,
+                                        //   child: Image.asset(
+                                        //     AppAssets.heart,
+                                        //     color: words[index].isFavorites
+                                        //         ? Colors.red
+                                        //         : Colors.white,
+                                        //   ),
+                                        // ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: RichText(
+                                            maxLines:
+                                                1, // không cho chữ xuống hàng khi chữ quá dài
+                                            overflow: TextOverflow
+                                                .ellipsis, // khi chữ quá dài thì sẽ ....
+                                            textAlign: TextAlign.start,
+                                            text: TextSpan(
+                                              text: firstText,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 98,
+                                                fontFamily: 'sen',
+                                                shadows: [
+                                                  BoxShadow(
+                                                      color: Colors.black38,
+                                                      offset: Offset(3, 5),
+                                                      blurRadius: 6),
+                                                ],
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  style: TextStyle(
+                                                    fontSize: 50,
+                                                  ),
+                                                  text: secondText,
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10, left: 20),
+                                                child: AutoSizeText(
+                                                  '"$quote"',
+                                                  maxFontSize:
+                                                      26, //size phải lớn hơn size font mặc định
+                                                  style: AppStyles.h4.copyWith(
+                                                    letterSpacing: 1,
+                                                    color: AppColors.textColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // ),
                                   ),
-                                ),
-                              ],
-                            ),
                           ),
                         );
                       },
                     ),
                   ),
-            _currentindex >= 6
-                ? Showmore()
-                :
-                // hàm indicator ở đây
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 17),
-                    child: SizedBox(
-                        height: size.height * 1 / 14.84,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 24),
-                          alignment: Alignment.center,
-                          child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 6,
-                              itemBuilder: (context, index) {
-                                return buildIndicator(
-                                    index == _currentindex, size);
-                              }),
-                          // child: Row(
-                          //   children: List.generate(
-                          //       words.length,
-                          //       (index) =>
-                          //           buildIndicator(index == _currentindex, size)),
-                          // ),
-                        )),
-                  ),
+            // _currentindex >= 6
+            //     ? Showmore()
+            //     :
+            // hàm indicator ở đây
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17),
+              child: SizedBox(
+                  height: size.height * 1 / 14.84,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    alignment: Alignment.center,
+                    child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: words.length >= 5 ? 6 : words.length,
+                        itemBuilder: (context, index) {
+                          return buildIndicator(index == _currentindex, size);
+                        }),
+                    // child: Row(
+                    //   children: List.generate(
+                    //       words.length,
+                    //       (index) =>
+                    //           buildIndicator(index == _currentindex, size)),
+                    // ),
+                  )),
+            ),
           ],
         ),
       ),
@@ -315,6 +385,11 @@ class _HomepageState extends State<Homepage> {
                 child: drawer_button(
                   label: 'Favorites',
                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_HomepageState) => FavoritePage()),
+                    );
                     print('Ontap Favorites');
                   },
                 ),
@@ -364,34 +439,34 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget Showmore() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      alignment: Alignment.centerLeft,
-      child: Material(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        elevation: 3,
-        color: AppColors.primaryColor,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ShowmoreWidgetPage(wordss: this.words),
-              ),
-            );
-          },
-          splashColor: Colors.black38,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: Text(
-              "Show more",
-              style: TextStyle(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget Showmore() {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+  //     alignment: Alignment.centerLeft,
+  //     child: Material(
+  //       borderRadius: BorderRadius.all(Radius.circular(20)),
+  //       elevation: 3,
+  //       color: AppColors.primaryColor,
+  //       child: InkWell(
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (_) => ShowmoreWidgetPage(wordss: this.words),
+  //             ),
+  //           );
+  //         },
+  //         splashColor: Colors.black38,
+  //         borderRadius: BorderRadius.all(Radius.circular(20)),
+  //         child: Container(
+  //           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+  //           child: Text(
+  //             "Show more",
+  //             style: TextStyle(),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
