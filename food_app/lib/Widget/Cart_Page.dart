@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:food_app/data/data.dart';
 import 'package:food_app/fontstyle/fontstyle.dart';
@@ -147,6 +149,9 @@ class _CartScreenState extends State<CartScreen> {
                         style: Appstyle.h2.copyWith(color: Colors.green)),
                   ],
                 ),
+                SizedBox(
+                  height: 50,
+                )
               ],
             ),
           );
@@ -159,6 +164,39 @@ class _CartScreenState extends State<CartScreen> {
             color: Colors.grey,
           );
         },
+      ),
+      bottomSheet: Container(
+        // ignore: sort_child_properties_last
+        child: FlatButton(
+            height: 90,
+            onPressed: () {},
+            child: Text(
+              'CHECKOUT',
+              style: Appstyle.h1.copyWith(
+                  letterSpacing: 1, fontSize: 22, color: Colors.white),
+            )),
+        height: 90,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.yellow[900],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 2),
+              blurRadius: 6,
+            ),
+          ],
+        ),
+        // child: Center(
+        //   child: FlatButton(
+        //       height: 90,
+        //       onPressed: () {},
+        //       child: Text(
+        //         'CHECKOUT',
+        //         style: Appstyle.h1.copyWith(
+        //             letterSpacing: 1, fontSize: 22, color: Colors.white),
+        //       )),
+        // ),
       ),
     );
   }
