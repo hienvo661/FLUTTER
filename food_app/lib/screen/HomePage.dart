@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
-import 'package:food_app/Widget/Cart_Page.dart';
 import 'package:food_app/Widget/Restaurant_Page.dart';
 import 'package:food_app/data/data.dart';
 import 'package:food_app/fontstyle/fontstyle.dart';
@@ -58,12 +57,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           FlatButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => CartScreen()),
-              );
-            },
+            onPressed: () {},
             child: Text(
               'Cart(${currentUser.cart.length})',
               style: TextStyle(fontSize: 18, color: Colors.white),
