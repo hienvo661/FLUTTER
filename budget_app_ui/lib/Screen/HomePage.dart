@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:budget_app_ui/Widget/BarChart.dart';
-import 'package:budget_app_ui/Widget/colors_category.dart';
+import 'package:budget_app_ui/colors_category.dart';
 import 'package:budget_app_ui/data/data.dart';
 import 'package:budget_app_ui/models/category_model.dart';
 import 'package:budget_app_ui/models/expense_model.dart';
@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                 if (barWith < 0) {
                   barWith = 0;
                 }
-
                 return Stack(
                   children: <Widget>[
                     Container(
