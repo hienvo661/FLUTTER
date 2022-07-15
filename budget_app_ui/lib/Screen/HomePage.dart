@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:budget_app_ui/Widget/BarChart.dart';
-import 'package:budget_app_ui/colors_category.dart';
+import 'package:budget_app_ui/Screen/category_screen.dart';
+import 'package:budget_app_ui/Widget/colors_category.dart';
 import 'package:budget_app_ui/data/data.dart';
 import 'package:budget_app_ui/models/category_model.dart';
 import 'package:budget_app_ui/models/expense_model.dart';
@@ -16,71 +17,81 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   _buildcategory(Category category, double totalAmount) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      height: 100,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.blueAccent,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12, offset: Offset(0, 2), blurRadius: 6)
-          ]),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  category.name,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  '\$${(category.maxAmount - totalAmount).toStringAsFixed(2)}/ \$${category.maxAmount}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
-            SizedBox(height: 10),
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final double maxBarwith = constraints.maxWidth;
-                final double percent =
-                    (category.maxAmount - totalAmount) / category.maxAmount;
+    return GestureDetector(
+      onTap: (() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CategoryScreen(category: category),
+          ),
+        );
+      }),
+      child: Container(
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        height: 100,
+        width: double.infinity,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.blueAccent,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black12, offset: Offset(0, 2), blurRadius: 6)
+            ]),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    category.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    '\$${(category.maxAmount - totalAmount).toStringAsFixed(2)}/ \$${category.maxAmount}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  )
+                ],
+              ),
+              SizedBox(height: 10),
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final double maxBarwith = constraints.maxWidth;
+                  final double percent =
+                      (category.maxAmount - totalAmount) / category.maxAmount;
 
-                double barWith = percent * maxBarwith;
-                if (barWith < 0) {
-                  barWith = 0;
-                }
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    Container(
-                      height: 20,
-                      width: barWith,
-                      decoration: BoxDecoration(
-                          color: getColor(context, percent),
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    // Container(
-                    //   height: 20,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.yellow[900],
-                    //       borderRadius: BorderRadius.circular(12)),
-                    // ),
-                  ],
-                );
-              },
-            )
-          ]),
+                  double barWith = percent * maxBarwith;
+                  if (barWith < 0) {
+                    barWith = 0;
+                  }
+                  return Stack(
+                    children: <Widget>[
+                      Container(
+                        height: 20,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      Container(
+                        height: 20,
+                        width: barWith,
+                        decoration: BoxDecoration(
+                            color: getColor(context, percent),
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      // Container(
+                      //   height: 20,
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.yellow[900],
+                      //       borderRadius: BorderRadius.circular(12)),
+                      // ),
+                    ],
+                  );
+                },
+              )
+            ]),
+      ),
     );
   }
 
