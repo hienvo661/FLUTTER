@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class CutomTextField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final IconData icon;
   final String label;
   final String hintText;
   final bool isSecret;
-
-  CutomTextField(
+  final List<TextInputFormatter>? inputFormatter;
+  CustomTextField(
       {Key? key,
       required this.icon,
       required this.label,
       required this.hintText,
-      this.isSecret = false})
+      this.isSecret = false,
+      this.inputFormatter})
       : super(key: key);
 
   @override
-  State<CutomTextField> createState() => _CutomTextFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _CutomTextFieldState extends State<CutomTextField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   bool isObscure = false;
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _CutomTextFieldState extends State<CutomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: widget.inputFormatter,
       obscureText: isObscure,
       decoration: InputDecoration(
         prefixIcon: Icon(widget.icon),
@@ -44,7 +47,7 @@ class _CutomTextFieldState extends State<CutomTextField> {
             : null, //hiện icon hiển thị pass ở mục password
         labelText: widget.label,
         hintText: widget.hintText,
-        isDense: true,
+        isDense: true, //tự đông giãn trong button
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
       ),
     );
