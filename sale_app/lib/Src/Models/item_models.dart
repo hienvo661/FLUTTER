@@ -1,6 +1,6 @@
 class itemModels {
   String itemName;
-  String imgUrl;
+  List<String> imgUrl;
   String unit;
   double price;
   String description;

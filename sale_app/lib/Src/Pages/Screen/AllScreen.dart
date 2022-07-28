@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:sale_app/Src/Pages/Screen/HomeScreen.dart';
+import 'package:sale_app/Src/Pages/Screen/CartScreen.dart';
 import 'package:sale_app/Src/Pages/Values/custom_color.dart';
 
 class AllScreen extends StatefulWidget {
@@ -22,9 +23,7 @@ class _AllScreenState extends State<AllScreen> {
         controller: _pageController,
         children: [
           HomeScreen(),
-          Container(
-            color: Colors.blue,
-          ),
+          CartScreen(),
           Container(
             color: Colors.green,
           ),
